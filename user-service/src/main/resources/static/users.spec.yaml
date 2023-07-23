@@ -1,0 +1,51 @@
+openapi: 3.0.2
+info:
+  title: Users Service
+  description: Microservice for handling user information
+  version: 1.0.0
+servers:
+  - url: /api/v1
+paths:
+  /users:
+    get:
+      description: Fetches all users.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/userDto"
+
+components:
+  schemas:
+    userDto:
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        email: email
+        firstName: firstName
+        lastName: lastName
+      type: object
+      required:
+        - id
+        - email
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+    error:
+      type: object
+      properties:
+        message:
+          type: string

@@ -1,0 +1,26 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        default_schema: "public"
+  datasource:
+    generate-unique-name: false
+    url: "jdbc:postgresql://${API_URL}:5432/postgres?currentSchema=public"
+    username: "postgres"
+    password: "password"
+    driverClassName: org.postgresql.Driver
+  kafka:
+    bootstrap-servers: localhost:29092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+server:
+  port: 8080
+  forward-headers-strategy: framework
+springdoc:
+  swagger-ui:
+    url: users.spec.yaml
+    path: /

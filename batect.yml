@@ -1,0 +1,52 @@
+containers:
+  zookeeper:
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    image: 'confluentinc/cp-zookeeper:latest'
+    ports:
+      - '2181:2181'
+  broker:
+    dependencies:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker:9092,PLAINTEXT_HOST://localhost:29092'
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    image: 'confluentinc/cp-kafka:latest'
+    ports:
+      - '29092:29092'
+  kafdrop:
+    dependencies:
+      - broker
+    environment:
+      KAFKA_BROKERCONNECT: 'broker:9092'
+    image: 'obsidiandynamics/kafdrop:latest'
+    ports:
+      - '9092:9000'
+  user-db:
+    image: postgres:latest
+    ports:
+      - local: 5432
+        container: 5432
+    environment:
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    volumes: 
+      - type: cache
+        name: backend-db
+        container: /var/lib/postgresql/data
+tasks:
+  run-kafka:
+    run:
+      container: kafdrop
+  user-db:
+    run:
+      container: user-db
+  
+
