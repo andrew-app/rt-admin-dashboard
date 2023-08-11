@@ -6,6 +6,7 @@ import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy
 import org.apache.kafka.connect.data.Struct
 import org.apache.kafka.connect.source.SourceRecord
+import org.slf4j.LoggerFactory
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
 import java.util.*
@@ -61,9 +62,12 @@ final class CDCListener(
                 template.send("user-connector.users", UUID.randomUUID().toString(), cdcMessage)
 
 
-                println("CDC captured, $operation operation with data: $dataMap was published to user-connect.users topic.")
+                logger.info("CDC captured, $operation operation with data: $dataMap was published to user-connect.users topic.")
             }
         }
+    }
+    companion object {
+        private val logger = LoggerFactory.getLogger(CDCListener::class.java)
     }
 }
 
