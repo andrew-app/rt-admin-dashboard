@@ -15,7 +15,7 @@ import org.springframework.messaging.handler.annotation.Payload
 
 @EnableKafka
 @Configuration
-class EventConsumer {
+class EventConsumerConfig {
     @Bean
     fun consumerFactory(): ConsumerFactory<String, String> {
         val props = mutableMapOf<String, Any>()
@@ -32,15 +32,4 @@ class EventConsumer {
         factory.consumerFactory = consumerFactory()
         return factory
     }
-
-    @KafkaListener(topics = ["user-connector.users"], groupId = "group_id")
-    fun consumeNewUserEvent(@Payload message: String) {
-        logger.info(message)
-    }
-
-
-    companion object {
-        private val logger = LoggerFactory.getLogger(EventConsumer::class.java)
-    }
-
 }
