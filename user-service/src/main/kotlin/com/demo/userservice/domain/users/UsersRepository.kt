@@ -22,5 +22,9 @@ class UsersRepository(
         usersRepository.save(Users(user.id, user.email, user.firstName, user.lastName))
     }
 
+    fun userSize(): Int {
+        return usersRepository.findAll().size
+    }
+
 
 }

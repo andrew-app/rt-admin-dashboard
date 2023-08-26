@@ -3,22 +3,45 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import TableHeaderCell from './TableHeaderCell';
 
-
-const fetchUsers = async () => {
-    const response = await axios.get('http://localhost:8080/api/v1/users');
-    return response.data;
-}
+import { createColumnHelper, getCoreRowModel, useReactTable, flexRender } from '@tanstack/react-table';
 
 interface UserDetails {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
 }
 
+const fetchUsers: () => Promise<UserDetails[]> = async () => {
+    const response = await axios.get('http://localhost:8080/api/v1/users');
+    return response.data.users;
+}
 
 const UserTable = () => {
     const { status, data, error } = useQuery(['existingUsers'], fetchUsers);
+
+    const columnHelper = createColumnHelper<UserDetails>();
+
+    const columns = [
+      columnHelper.accessor('firstName', {
+        cell: info => info.getValue(),
+        header: info => <TableHeaderCell  key={info.column.id} text='First Name' />
+      }),
+      columnHelper.accessor('lastName', {
+        cell: info => info.getValue(),
+        header: info => <TableHeaderCell key={info.column.id} text='Last Name' />
+      }),
+      columnHelper.accessor('email', {
+        cell: info => info.getValue(),
+        header: info => <TableHeaderCell  key={info.column.id} text='Email' />
+      }),
+    ];
+
+    const table = useReactTable({
+      data: data || [],
+      columns,
+      getCoreRowModel: getCoreRowModel(),
+    });
 
     const userError = error as Error;
 
@@ -37,25 +60,33 @@ const UserTable = () => {
         aria-label="user table">
           <TableHead >
             <TableRow>
-                <TableHeaderCell text="First Name" />
-                <TableHeaderCell text="Last Name" />
-                <TableHeaderCell text="Status" />
-                <TableHeaderCell text="Email" />
+                {
+                  table.getHeaderGroups().map(headerGroup => (
+                    headerGroup.headers.map(header => (
+                      flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )
+                    ))
+                  ))
+                }
             </TableRow>
           </TableHead>
           <TableBody>
             {
-                data.users.map((user: UserDetails) => 
+                table.getRowModel().rows.map(row => (
                 <TableRow
-                key={user.id}
+                  key={row.id}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
-                <TableCell align="right" sx={{borderWidth: '1px', borderColor: '#01b636'}}>{user.firstName}</TableCell>
-                <TableCell align="right" sx={{borderWidth: '1px', borderColor: '#01b636'}}>{user.lastName}</TableCell>
-                <TableCell align="right" sx={{borderWidth: '1px', borderColor: '#01b636'}}>ACTIVE</TableCell>
-                <TableCell align="right" sx={{borderWidth: '1px', borderColor: '#01b636'}}>{user.email}</TableCell>
-              </TableRow>
-            )
-        }
+                  {row.getAllCells().map(cell => (
+                      <TableCell align="right" sx={{borderWidth: '1px', borderColor: '#01b636'}} key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                  ))}
+                </TableRow>
+                ))
+            }
           </TableBody>
         </Table>
       </TableContainer>
