@@ -1,6 +1,7 @@
-import { Alert, CircularProgress, Paper, TableContainer, Table, TableCell, TableHead, TableBody, TableRow, Typography, makeStyles, Box } from '@mui/material';
+import { Alert, CircularProgress, TableContainer, Table, TableCell, TableHead, TableBody, TableRow, Box } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import TableHeaderCell from './TableHeaderCell';
 
 
 const fetchUsers = async () => {
@@ -36,18 +37,10 @@ const UserTable = () => {
         aria-label="user table">
           <TableHead >
             <TableRow>
-                <TableCell align="right" sx={{borderWidth: '1px', borderColor: '#01b636'}}>
-                    <Typography variant="subtitle1" color="#FFD700">First Name</Typography>
-                </TableCell>
-                <TableCell align="right" sx={{borderWidth: '1px', borderColor: '#01b636'}}>
-                    <Typography variant="subtitle1" color="#FFD700">Last Name</Typography>
-                </TableCell>
-                <TableCell align="right" sx={{borderWidth: '1px', borderColor: '#01b636'}}>
-                    <Typography variant="subtitle1" color="#FFD700">Status</Typography>
-                </TableCell>
-                <TableCell align="right" sx={{borderWidth: '1px', borderColor: '#01b636'}}>
-                    <Typography variant="subtitle1" color="#FFD700">Email</Typography>
-                </TableCell>
+                <TableHeaderCell text="First Name" />
+                <TableHeaderCell text="Last Name" />
+                <TableHeaderCell text="Status" />
+                <TableHeaderCell text="Email" />
             </TableRow>
           </TableHead>
           <TableBody>
