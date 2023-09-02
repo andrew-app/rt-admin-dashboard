@@ -6,8 +6,11 @@ interface UserTableHeaderCellProps {
 
 const TableHeaderCell = (props: UserTableHeaderCellProps) => {
     return(
-    <TableCell align="right" sx={{borderWidth: '1px', borderColor: '#01b636'}}>
-        <Typography variant="subtitle1" color="#FFD700">
+    <TableCell align="right" sx={{borderWidth: '1px', borderColor: 'black'}}>
+        <Typography variant="subtitle1" sx={{
+            fontFamily: 'Quicksand',
+            fontWeight: 'bold'
+        }}>
             <>
             {props.text}
             </>

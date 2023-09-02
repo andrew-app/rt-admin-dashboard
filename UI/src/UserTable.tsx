@@ -54,11 +54,15 @@ const UserTable = () => {
     }
     
     return (
-        <Box sx={{ border: 1, borderColor: "#FFD700", borderRadius: '5px' }}>
+        <Box sx={{ border: 1, borderColor: "#8b499b", borderRadius: '5px' }}>
         <TableContainer>
         <Table sx={{ minWidth: 1024 }} 
         aria-label="user table">
-          <TableHead >
+          <TableHead sx={
+            {
+              backgroundColor: '#8b499b',
+            }
+          }>
             <TableRow>
                 {
                   table.getHeaderGroups().map(headerGroup => (
@@ -80,7 +84,7 @@ const UserTable = () => {
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   {row.getAllCells().map(cell => (
-                      <TableCell align="right" sx={{borderWidth: '1px', borderColor: '#01b636'}} key={cell.id}>
+                      <TableCell align="right" sx={{borderWidth: '1px', borderColor: '#8b499b'}} key={cell.id}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                   ))}

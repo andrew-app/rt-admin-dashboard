@@ -4,10 +4,17 @@ import UserTable from "./UserTable";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Grid } from "@mui/material";
+
 const App = () => {
   const queryClient = new QueryClient();
   const theme = createTheme({
+    typography: {
+      fontFamily: 'Libre Franklin, Quicksand',
+    },
     palette: {
+      background: {
+        default: '#1f2142',
+      },
       mode: 'dark',
     },
   });
