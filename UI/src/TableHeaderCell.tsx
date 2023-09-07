@@ -4,16 +4,14 @@ interface UserTableHeaderCellProps {
     text: string;
 }
 
-const TableHeaderCell = (props: UserTableHeaderCellProps) => {
+const TableHeaderCell = ({text}: UserTableHeaderCellProps) => {
     return(
-    <TableCell align="right" sx={{borderWidth: '1px', borderColor: 'black'}}>
+    <TableCell align="right">
         <Typography variant="subtitle1" sx={{
             fontFamily: 'Quicksand',
             fontWeight: 'bold'
         }}>
-            <>
-            {props.text}
-            </>
+            {text}
         </Typography>
     </TableCell>
     );

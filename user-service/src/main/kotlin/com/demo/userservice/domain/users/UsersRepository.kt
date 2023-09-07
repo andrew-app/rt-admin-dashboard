@@ -26,5 +26,9 @@ class UsersRepository(
         return usersRepository.findAll().size
     }
 
+    fun deleteAllUsers() {
+        usersRepository.deleteAll()
+    }
+
 
 }

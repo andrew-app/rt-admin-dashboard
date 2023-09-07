@@ -15,15 +15,16 @@ class UserGenerator(
     fun addUser() {
         val firstName = mockUserGenerator.name().firstName()
         val lastName = mockUserGenerator.name().lastName()
-        if (usersRepository.userSize() <= 40 ) {
-            usersRepository.saveUser(
-                Users(
-                    UUID.randomUUID(),
-                    "${firstName.lowercase(Locale.getDefault())}.${lastName.lowercase(Locale.getDefault())}@email.com",
-                    firstName,
-                    lastName
-                )
-            )
+        if (usersRepository.userSize() >= 40 ) {
+            usersRepository.deleteAllUsers()
         }
+        usersRepository.saveUser(
+            Users(
+                UUID.randomUUID(),
+                "${firstName.lowercase(Locale.getDefault())}.${lastName.lowercase(Locale.getDefault())}@email.com",
+                firstName,
+                lastName
+            )
+        )
     }
 }
