@@ -1,9 +1,11 @@
-import { Alert, CircularProgress, TableContainer, Table, TableCell, TableHead, TableBody, TableRow, Box } from '@mui/material';
+import { Alert, CircularProgress, TableContainer, Table, TableCell, TableHead, TableBody, TableRow, Box, IconButton, Grid, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import TableHeaderCell from './TableHeaderCell';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
-import { createColumnHelper, getCoreRowModel, useReactTable, flexRender } from '@tanstack/react-table';
+import { createColumnHelper, getCoreRowModel, useReactTable, flexRender, getPaginationRowModel } from '@tanstack/react-table';
 
 interface UserDetails {
   id: number;
@@ -13,7 +15,8 @@ interface UserDetails {
 }
 
 const fetchUsers: () => Promise<UserDetails[]> = async () => {
-    const response = await axios.get('http://localhost:8080/api/v1/users');
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+    const response = await axios.get(`${API_BASE_URL}/api/v1/users`);
     return response.data.users;
 }
 
@@ -41,6 +44,7 @@ const UserTable = () => {
       data: data || [],
       columns,
       getCoreRowModel: getCoreRowModel(),
+      getPaginationRowModel: getPaginationRowModel(),
     });
 
     const userError = error as Error;
@@ -54,6 +58,7 @@ const UserTable = () => {
     }
     
     return (
+      <Grid sm={6} md={9} lg={12}>
         <Box sx={{ border: 1, borderColor: "#8b499b", borderRadius: '5px' }}>
         <TableContainer>
         <Table sx={{ minWidth: 1024 }} 
@@ -95,6 +100,18 @@ const UserTable = () => {
         </Table>
       </TableContainer>
       </Box>
+      <Box display={'flex'} justifyContent={'flex-end'}>
+      <Typography variant="subtitle1" paddingTop={'0.4rem'} paddingRight={'0.4rem'}>
+          Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+      </Typography>
+        <IconButton onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+          <ArrowBackIosIcon />
+        </IconButton>
+        <IconButton onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+          <ArrowForwardIosIcon />
+        </IconButton>
+      </Box>
+      </Grid>
     );
 };
 
