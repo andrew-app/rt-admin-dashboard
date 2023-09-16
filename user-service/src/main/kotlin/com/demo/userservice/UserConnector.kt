@@ -1,7 +1,6 @@
 package com.demo.userservice
 
 import io.debezium.config.Configuration
-import io.debezium.embedded.EmbeddedEngine
 import org.springframework.context.annotation.Bean
 
 
@@ -15,7 +14,7 @@ class UserConnector {
             .with("offset.storage", "org.apache.kafka.connect.storage.FileOffsetBackingStore")
             .with("offset.storage.file.filename", "/tmp/offsets.dat")
             .with("offset.flush.interval.ms", "60000")
-            .with("database.hostname", "localhost")
+            .with("database.hostname", System.getenv("API_URL") ?: "localhost")
             .with("database.port", "5432")
             .with("database.user", "postgres")
             .with("database.password", "password")

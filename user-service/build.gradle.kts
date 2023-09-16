@@ -76,5 +76,5 @@ tasks.withType<Test> {
 }
 
 springBoot {
-    mainClass.set("com.demo.userservice.BackendApplicationKt")
+    mainClass.set("com.demo.userservice.UserServiceApplicationKt")
 }
