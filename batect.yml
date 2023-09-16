@@ -36,14 +36,14 @@ containers:
   ui-env:
     image: 'node:lts-slim'
     ports:
-      - local: 5173
-        container: 5173
+      - local: 3000
+        container: 3000
     volumes:
       - local: UI
         container: /app
       - type: cache
         name: npm-cache
-        container: /app/node-modules
+        container: /app/node_modules
     working_directory: /app
   zookeeper:
     environment:
@@ -101,7 +101,7 @@ tasks:
   run-ui:
     run:
       container: ui-env
-      command: npm run dev -- --host
+      command: npm run dev
   install-ui:
     run:
       container: ui-env

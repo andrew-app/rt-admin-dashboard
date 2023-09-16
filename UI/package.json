@@ -14,6 +14,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.8",
     "@mui/material": "^5.14.6",
+    "@tanstack/match-sorter-utils": "^8.8.4",
     "@tanstack/react-query": "^4.33.0",
     "@tanstack/react-table": "^8.9.3",
     "axios": "^1.4.0",

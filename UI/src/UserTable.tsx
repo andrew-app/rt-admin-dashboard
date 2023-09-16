@@ -5,10 +5,14 @@ import TableHeaderCell from './TableHeaderCell';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
-import { createColumnHelper, getCoreRowModel, useReactTable, flexRender, getPaginationRowModel } from '@tanstack/react-table';
+import { createColumnHelper, getCoreRowModel, useReactTable, flexRender, getPaginationRowModel, getFilteredRowModel } from '@tanstack/react-table';
+import { useEffect, useState } from 'react';
+
+import { TextField } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 interface UserDetails {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -24,6 +28,8 @@ const UserTable = () => {
     const { status, data, error } = useQuery(['existingUsers'], fetchUsers);
 
     const columnHelper = createColumnHelper<UserDetails>();
+
+    const [searchText, setSearchText] = useState('');
 
     const columns = [
       columnHelper.accessor('firstName', {
@@ -43,7 +49,12 @@ const UserTable = () => {
     const table = useReactTable({
       data: data || [],
       columns,
+      state: {
+        globalFilter: searchText
+      },
+      onGlobalFilterChange: setSearchText,
       getCoreRowModel: getCoreRowModel(),
+      getFilteredRowModel: getFilteredRowModel(),
       getPaginationRowModel: getPaginationRowModel(),
     });
 
@@ -59,6 +70,7 @@ const UserTable = () => {
     
     return (
       <Grid sm={6} md={9} lg={12}>
+        <Search value={searchText ?? ''} onChange={value => setSearchText(String(value))}/>
         <Box sx={{ border: 1, borderColor: "#8b499b", borderRadius: '5px' }}>
         <TableContainer>
         <Table sx={{ minWidth: 1024 }} 
@@ -113,6 +125,38 @@ const UserTable = () => {
       </Box>
       </Grid>
     );
+};
+
+const Search = ({
+  value: initialValue,
+  onChange,
+  debounce = 500,
+  ...props
+}: {
+  value: string | number
+  onChange: (value: string | number) => void
+  debounce?: number
+}) => {
+  const [value, setValue] = useState(initialValue)
+
+  useEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(value)
+    }, debounce)
+
+    return () => clearTimeout(timeout)
+  }, [value])
+
+  return (
+    <Box>
+      <SearchIcon sx={{height: '55px', width: '55px', paddingInline: '5px', paddingTop: '2px', backgroundColor: '#8b499b', borderRadius: '5px 0px 0px 5px',}}/>
+      <TextField id="outlined-search" label="Search" type="search" {...props} value={value} onChange={e => setValue(e.target.value)} sx={{paddingBottom: '10px'}}/>
+    </Box>
+  )
 };
 
 export default UserTable;
