@@ -1,4 +1,4 @@
-import { Alert, CircularProgress, TableContainer, Table, TableCell, TableHead, TableBody, TableRow, Box, IconButton, Grid, Typography } from '@mui/material';
+import { Alert, CircularProgress, TableContainer, Table, TableCell, TableHead, TableBody, TableRow, Box, IconButton, Grid, Typography, useTheme, Paper, Card, Container, Stack, styled } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import TableHeaderCell from './TableHeaderCell';
@@ -6,10 +6,9 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 import { createColumnHelper, getCoreRowModel, useReactTable, flexRender, getPaginationRowModel, getFilteredRowModel } from '@tanstack/react-table';
-import { useEffect, useState } from 'react';
-
-import { TextField } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import { useState } from 'react';
+import { Search } from './Search';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 interface UserDetails {
   id: string;
@@ -24,6 +23,13 @@ const fetchUsers: () => Promise<UserDetails[]> = async () => {
     return response.data.users;
 }
 
+const UserCard = styled(Paper)(({ theme }) => ({
+  backgroundColor: '#8b499b',
+  ...theme.typography.body2,
+  padding: theme.spacing(3),
+  color: theme.palette.text.secondary,
+}));
+
 const UserTable = () => {
     const { status, data, error } = useQuery(['existingUsers'], fetchUsers);
 
@@ -31,6 +37,10 @@ const UserTable = () => {
 
     const [searchText, setSearchText] = useState('');
 
+    const theme = useTheme();
+
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+    
     const columns = [
       columnHelper.accessor('firstName', {
         cell: info => info.getValue(),
@@ -67,13 +77,62 @@ const UserTable = () => {
     if (status === 'error') {
         return <Alert severity="error">Something went wrong: {userError.message}</Alert>
     }
+
+    if (isMobile) {
+      return(
+        <Box>
+          <Stack spacing={2}>
+            {
+              table.getRowModel().flatRows.map(row => (
+            <UserCard>
+                <Grid container columns={2} gap={1}>
+                  <Typography variant='h6' sx={{fontFamily: 'Quicksand', fontWeight: 'bold'}}>
+                    First Name:
+                  </Typography>
+                  <Typography variant='h6'>
+                    {row.original.firstName}
+                  </Typography>
+                </Grid>
+                <Grid container columns={2} gap={1}>
+                <Typography variant='h6' sx={{fontFamily: 'Quicksand', fontWeight: 'bold'}}>
+                  Last Name:
+                </Typography>
+                <Typography variant='h6'>
+                  {row.original.lastName}
+                </Typography>
+                </Grid>
+                <Grid container columns={2} gap={1}>
+                <Typography variant='h6' sx={{fontFamily: 'Quicksand', fontWeight: 'bold'}}>
+                  Email:
+                </Typography>
+                  <Typography variant='h6'>
+                    {row.original.email}
+                  </Typography>
+                </Grid>   
+            </UserCard>))
+            }
+          </Stack>
+          <Box display={'flex'} justifyContent={'flex-end'}>
+          <Typography variant="subtitle1" paddingTop={'0.4rem'} paddingRight={'0.4rem'}>
+              Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+          </Typography>
+            <IconButton onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+              <ArrowBackIosIcon />
+            </IconButton>
+            <IconButton onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+              <ArrowForwardIosIcon />
+            </IconButton>
+          </Box>
+        </Box>
+      );
+    };
     
     return (
       <Grid sm={6} md={9} lg={12}>
         <Search value={searchText ?? ''} onChange={value => setSearchText(String(value))}/>
         <Box sx={{ border: 1, borderColor: "#8b499b", borderRadius: '5px' }}>
         <TableContainer>
-        <Table sx={{ minWidth: 1024 }} 
+        <Table sx={{ minWidth: 1024}} 
         aria-label="user table">
           <TableHead sx={
             {
@@ -125,38 +184,6 @@ const UserTable = () => {
       </Box>
       </Grid>
     );
-};
-
-const Search = ({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}: {
-  value: string | number
-  onChange: (value: string | number) => void
-  debounce?: number
-}) => {
-  const [value, setValue] = useState(initialValue)
-
-  useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      onChange(value)
-    }, debounce)
-
-    return () => clearTimeout(timeout)
-  }, [value])
-
-  return (
-    <Box>
-      <SearchIcon sx={{height: '55px', width: '55px', paddingInline: '5px', paddingTop: '2px', backgroundColor: '#8b499b', borderRadius: '5px 0px 0px 5px',}}/>
-      <TextField id="outlined-search" label="Search" type="search" {...props} value={value} onChange={e => setValue(e.target.value)} sx={{paddingBottom: '10px'}}/>
-    </Box>
-  )
 };
 
 export default UserTable;
