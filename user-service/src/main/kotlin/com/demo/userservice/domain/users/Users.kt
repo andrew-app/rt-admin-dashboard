@@ -17,6 +17,8 @@ class Users (
     val id: UUID = UUID.randomUUID(),
     @Column(name = "email", nullable = false)
     val email: String,
+    @Column(name = "status", nullable = false)
+    var status: String = "Pending",
     @Column(name = "first_name", nullable = true)
     val firstName: String?,
     @Column(name = "last_name", nullable = true)

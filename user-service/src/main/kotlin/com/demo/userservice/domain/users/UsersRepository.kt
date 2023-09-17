@@ -19,7 +19,7 @@ class UsersRepository(
     }
 
     fun saveUser(user: Users) {
-        usersRepository.save(Users(user.id, user.email, user.firstName, user.lastName))
+        usersRepository.save(Users(user.id, user.email, user.status, user.firstName, user.lastName))
     }
 
     fun userSize(): Int {
@@ -28,6 +28,16 @@ class UsersRepository(
 
     fun deleteAllUsers() {
         usersRepository.deleteAll()
+    }
+
+    fun findUserById(id: UUID): Users {
+        return usersRepository.findById(id).get()
+    }
+
+    fun updateUserStatus(id: UUID, status: String) {
+        val user = findUserById(id)
+
+        usersRepository.save(Users(user.id, user.email, status, user.firstName, user.lastName))
     }
 
 

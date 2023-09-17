@@ -22,7 +22,7 @@ class Controller {
     fun consumeNewUserEvent(@Payload message: String) {
         val userNode = mapper.readTree(message)
         val user = userNode as ObjectNode
-        user.remove("operation")
+//        user.remove("operation")
         logger.info(user.toString())
         this.sink.tryEmitNext(user.toString())
     }

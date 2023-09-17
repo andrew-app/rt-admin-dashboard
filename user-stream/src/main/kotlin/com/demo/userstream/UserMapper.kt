@@ -9,6 +9,7 @@ data class UserMapper(
 data class UserDetails(
     val id: UUID,
     val email: String,
+    val status: String,
     val firstName: String,
     val lastName: String,
 )

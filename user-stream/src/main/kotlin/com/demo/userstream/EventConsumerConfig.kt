@@ -19,7 +19,7 @@ class EventConsumerConfig {
     @Bean
     fun consumerFactory(): ConsumerFactory<String, String> {
         val props = mutableMapOf<String, Any>()
-        props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = "localhost:29092"
+        props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = "localhost:9092"
         props[ConsumerConfig.GROUP_ID_CONFIG] =  "group_id"
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java

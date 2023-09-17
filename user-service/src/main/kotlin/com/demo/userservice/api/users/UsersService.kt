@@ -12,12 +12,19 @@ class UsersService(
 ) {
     fun findUsers(): List<UserDto> {
         return usersRepository.findAllUsers().map {
-                user ->
+            user ->
+            val status = when (user.status) {
+                "Pending" -> UserDto.Status.PENDING
+                "Active" -> UserDto.Status.ACTIVE
+                "Suspended" -> UserDto.Status.SUSPENDED
+                else -> UserDto.Status.PENDING
+            }
             UserDto(
                 user.id.toString(),
                 user.email,
+                status,
                 user.firstName,
-                user.lastName
+                user.lastName,
             )
         }
     }
