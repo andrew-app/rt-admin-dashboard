@@ -13,7 +13,7 @@ class UserGeneratorConfig(
 ) {
     private val mockUserGenerator =  Faker()
     @Bean
-    fun addUserScheduledTask(): UserGenerator {
+    fun scheduledTasks(): UserGenerator {
         return UserGenerator(userRepo, mockUserGenerator)
     }
 }

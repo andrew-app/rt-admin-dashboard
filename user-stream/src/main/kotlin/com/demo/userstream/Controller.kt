@@ -22,12 +22,12 @@ class Controller {
     fun consumeNewUserEvent(@Payload message: String) {
         val userNode = mapper.readTree(message)
         val user = userNode as ObjectNode
-//        user.remove("operation")
+        user.remove("operation")
         logger.info(user.toString())
         this.sink.tryEmitNext(user.toString())
     }
 
-    @GetMapping(path = ["/newUsers"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    @GetMapping(path = ["/userstatus"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
     fun streamFlux(): Flux<String> {
         return this.sink.asFlux()
     }

@@ -22,7 +22,7 @@ final class CDCListener(
 
     private val embeddedEngine: EmbeddedEngine? = EmbeddedEngine.create()
         .using(userConnector.connectUsers())
-        .notifying(this::handleUserCreatedEvent)
+        .notifying(this::handleStatusUpdateEvent)
         .build()
 
 
@@ -38,18 +38,15 @@ final class CDCListener(
         this.embeddedEngine?.stop()
     }
 
-    private fun handleUserCreatedEvent(sourceRecord: SourceRecord) {
+    private fun handleStatusUpdateEvent(sourceRecord: SourceRecord) {
         val sourceRecordValue = sourceRecord.value() as Struct?
 
         sourceRecordValue?.let { value ->
             val operation = value.get(OPERATION) as String
 
-            if (operation != "r") {
+            if (operation == "u") {
 
-                var record = AFTER
-                if (operation == "d") {
-                    record = BEFORE
-                }
+                val record = AFTER
 
                 val struct = sourceRecordValue.get(record) as Struct
 
