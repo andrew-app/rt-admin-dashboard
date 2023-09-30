@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import UserTable from "./UserTable";
+import Notifications from "./Notifications";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Grid } from "@mui/material";
@@ -31,6 +32,7 @@ const App = () => {
         sx={{ minHeight: '100vh' }}
       >
       <Grid item xs={3}>
+        <Notifications/>
         <UserTable />
       </Grid>
     </Grid>
