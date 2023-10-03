@@ -18,13 +18,16 @@ import reactor.core.publisher.Sinks
 class Controller {
     val sink = Sinks.many().multicast().onBackpressureBuffer<String>()
     val mapper = jacksonObjectMapper()
+    val userStatusService = Service()
     @KafkaListener(topics = ["user-connector.users"], groupId = "group_id")
     fun consumeNewUserEvent(@Payload message: String) {
         val userNode = mapper.readTree(message)
-        val user = userNode as ObjectNode
-        user.remove("operation")
-        logger.info(user.toString())
-        this.sink.tryEmitNext(user.toString())
+        val userEventMessage = userNode as ObjectNode
+        logger.info(userEventMessage)
+        userEventMessage.remove("operation")
+        val deserializedMessage = mapper.readValue(userEventMessage.toString(), UserStatusEvent::class.java)
+        val constructedMessage = userStatusService.buildStatusMessage(deserializedMessage)
+        this.sink.tryEmitNext(constructedMessage)
     }
 
     @GetMapping(path = ["/userstatus"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])

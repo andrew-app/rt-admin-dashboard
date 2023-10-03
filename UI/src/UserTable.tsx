@@ -15,6 +15,7 @@ interface UserDetails {
   firstName: string;
   lastName: string;
   email: string;
+  status: string;
 }
 
 const fetchUsers: () => Promise<UserDetails[]> = async () => {
@@ -53,6 +54,10 @@ const UserTable = () => {
       columnHelper.accessor('email', {
         cell: info => info.getValue(),
         header: info => <TableHeaderCell  key={info.column.id} text='Email' />
+      }),
+      columnHelper.accessor('status', {
+        cell: info => info.getValue(),
+        header: info => <TableHeaderCell  key={info.column.id} text='Status' />
       }),
     ];
 
@@ -108,6 +113,14 @@ const UserTable = () => {
                   <Typography variant='h6'>
                     {row.original.email}
                   </Typography>
+                </Grid>
+                <Grid container columns={2} gap={1}>
+                <Typography variant='h6' sx={{fontFamily: 'Quicksand', fontWeight: 'bold'}}>
+                  Status:
+                </Typography>
+                <Typography variant='h6'>
+                  {row.original.status}
+                </Typography>
                 </Grid>   
             </UserCard>))
             }
