@@ -23,7 +23,7 @@ class Controller {
     fun consumeNewUserEvent(@Payload message: String) {
         val userNode = mapper.readTree(message)
         val userEventMessage = userNode as ObjectNode
-        logger.info(userEventMessage)
+        logger.info(userEventMessage.toString())
         userEventMessage.remove("operation")
         val deserializedMessage = mapper.readValue(userEventMessage.toString(), UserStatusEvent::class.java)
         val constructedMessage = userStatusService.buildStatusMessage(deserializedMessage)
