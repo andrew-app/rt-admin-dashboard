@@ -3,7 +3,7 @@ import { useEventSourceQuery } from "./useEventSourceQuery";
 import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 const Notifications = () => {
-    const API_BASE_URL = import.meta.env.local.VITE_API_USER_STREAM || '';
+    const API_BASE_URL = import.meta.env.VITE_API_USER_STREAM || '';
     const { data, status} = useEventSourceQuery(['notifications'], `${API_BASE_URL}/userstatus`);
     const queryClient = useQueryClient();
     const [open, setOpen] = useState(false);
