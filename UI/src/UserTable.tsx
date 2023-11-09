@@ -1,4 +1,4 @@
-import { Alert, CircularProgress, TableContainer, Table, TableCell, TableHead, TableBody, TableRow, Box, IconButton, Grid, Typography, useTheme, Paper, Stack, styled } from '@mui/material';
+import { Alert, CircularProgress, TableContainer, Table, TableCell, TableHead, TableBody, TableRow, Box, IconButton, Grid, Typography, useTheme, Paper, Stack, styled, Container } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import TableHeaderCell from './TableHeaderCell';
@@ -9,6 +9,8 @@ import { createColumnHelper, getCoreRowModel, useReactTable, flexRender, getPagi
 import { useState } from 'react';
 import { Search } from './Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { StatusTag, StatusTypes } from './StatusTag';
+import Notifications from './Notifications';
 
 interface UserDetails {
   id: string;
@@ -56,7 +58,7 @@ const UserTable = () => {
         header: info => <TableHeaderCell  key={info.column.id} text='Email' />
       }),
       columnHelper.accessor('status', {
-        cell: info => info.getValue(),
+        cell: info => <StatusTag userStatus={info.getValue().toUpperCase() as StatusTypes}/>,
         header: info => <TableHeaderCell  key={info.column.id} text='Status' />
       }),
     ];
@@ -67,6 +69,7 @@ const UserTable = () => {
       state: {
         globalFilter: searchText
       },
+      autoResetPageIndex: false,
       onGlobalFilterChange: setSearchText,
       getCoreRowModel: getCoreRowModel(),
       getFilteredRowModel: getFilteredRowModel(),
@@ -76,7 +79,7 @@ const UserTable = () => {
     const userError = error as Error;
 
     if (status === 'loading') {
-        return <CircularProgress size={100} color="success" />
+        return <CircularProgress size={100} color="primary" />
       }
     
     if (status === 'error') {
@@ -142,7 +145,10 @@ const UserTable = () => {
     
     return (
       <Grid sm={6} md={9} lg={12}>
-        <Search value={searchText ?? ''} onChange={value => setSearchText(String(value))}/>
+        <Container sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Search value={searchText ?? ''} onChange={value => setSearchText(String(value))}/>
+          <Notifications/>
+        </Container>
         <Box sx={{ border: 1, borderColor: "#8b499b", borderRadius: '5px' }}>
         <TableContainer>
         <Table sx={{ minWidth: 1024}} 
