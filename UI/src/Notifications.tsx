@@ -2,27 +2,33 @@ import { Alert, Badge, IconButton, Snackbar} from "@mui/material";
 import { useEventSourceQuery } from "./useEventSourceQuery";
 import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { getExistingUsers } from "./getExistingUsers";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 const Notifications = () => {
     const API_BASE_URL = import.meta.env.VITE_API_USER_STREAM || '';
     const { data } = useEventSourceQuery(['notifications'], `${API_BASE_URL}/userstatus`);
     const queryClient = useQueryClient();
     const [open, setOpen] = useState(false);
+    const userData = getExistingUsers();
     const handleInvalidate = () => queryClient.invalidateQueries(['existingUsers']);
     const [count, setCount] = useState(0);
-
+    let notificationStore: string[] = JSON.parse(sessionStorage.getItem('notifications') || '[]');
     useEffect(() => {
         if (data) {
             setOpen(true);
             setCount((prev) => prev + 1);
+            notificationStore.push(data)
+            sessionStorage.setItem('notifications', JSON.stringify(notificationStore));
         }
     }, [data]);
 
-    useEffect(() => {
-        if (open) {
-            handleInvalidate();
-        }
-    }, [open]);
+    if (open) {
+        handleInvalidate();
+    }
+
+    if (userData?.data?.length === 0) {
+        setCount(0);
+    }
 
     return (
         <>

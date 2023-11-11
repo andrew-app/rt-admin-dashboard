@@ -1,6 +1,4 @@
-import { Alert, CircularProgress, TableContainer, Table, TableCell, TableHead, TableBody, TableRow, Box, IconButton, Grid, Typography, useTheme, Paper, Stack, styled, Container } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { Alert, CircularProgress, TableContainer, Table, TableCell, TableHead, TableBody, TableRow, Box, IconButton, Grid, Typography, useTheme, Paper, Stack, styled, Container, Select, MenuItem } from '@mui/material';
 import TableHeaderCell from './TableHeaderCell';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -11,20 +9,8 @@ import { Search } from './Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { StatusTag, StatusTypes } from './StatusTag';
 import Notifications from './Notifications';
-
-interface UserDetails {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  status: string;
-}
-
-const fetchUsers: () => Promise<UserDetails[]> = async () => {
-    const API_BASE_URL = import.meta.env.VITE_API_USER_SERVICE || '';
-    const response = await axios.get(`${API_BASE_URL}/api/v1/users`);
-    return response.data.users;
-}
+import { getExistingUsers } from './getExistingUsers';
+import { UserDetails } from './UserTypes';
 
 const UserCard = styled(Paper)(({ theme }) => ({
   backgroundColor: '#8b499b',
@@ -34,7 +20,7 @@ const UserCard = styled(Paper)(({ theme }) => ({
 }));
 
 const UserTable = () => {
-    const { status, data, error } = useQuery(['existingUsers'], fetchUsers);
+    const { status, data, error } = getExistingUsers();
 
     const columnHelper = createColumnHelper<UserDetails>();
 
@@ -69,6 +55,7 @@ const UserTable = () => {
       state: {
         globalFilter: searchText
       },
+      initialState: { pagination: {pageSize: 15} },
       autoResetPageIndex: false,
       onGlobalFilterChange: setSearchText,
       getCoreRowModel: getCoreRowModel(),
@@ -190,9 +177,30 @@ const UserTable = () => {
         </Table>
       </TableContainer>
       </Box>
-      <Box display={'flex'} justifyContent={'flex-end'}>
-      <Typography variant="subtitle1" paddingTop={'0.4rem'} paddingRight={'0.4rem'}>
-          Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+      <Grid display={'flex'} justifyContent={'flex-end'} alignItems={'center'}>
+      <Box display={'flex'} gap={1} paddingRight={'1rem'} paddingTop={'0.25rem'}>
+      <Typography variant="subtitle1" paddingTop={'0.25rem'}>
+          Show
+      </Typography>
+      <Select
+        size='small'
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={table.getState().pagination.pageSize}
+        label="PageSize"
+        onChange={e => {
+          table.setPageSize(Number(e.target.value));
+        }}
+      >
+        {[15, 20, 30].map(pageSize => (
+          <MenuItem key={pageSize} value={pageSize}>
+            {pageSize}
+          </MenuItem>
+        ))}
+      </Select>
+      </Box>
+      <Typography variant="subtitle1">
+          Page {data.length === 0 ? 0 : table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
       </Typography>
         <IconButton onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
           <ArrowBackIosIcon />
@@ -200,7 +208,7 @@ const UserTable = () => {
         <IconButton onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
           <ArrowForwardIosIcon />
         </IconButton>
-      </Box>
+      </Grid>
       </Grid>
     );
 };

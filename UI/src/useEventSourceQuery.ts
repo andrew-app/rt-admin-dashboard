@@ -2,7 +2,8 @@ import { useQuery, useQueryClient, QueryKey } from '@tanstack/react-query'
 
 
 export const useEventSourceQuery = (queryKey: QueryKey, url: string) => {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
+  
   
 
   const fetchData = () => {

@@ -28,7 +28,7 @@ export const Search = ({
     }, [value])
   
     return (
-      <Box>
+      <Box sx={{padding: '1rem 0 0.5rem 0'}}>
         <SearchIcon sx={{height: '55px', width: '55px', paddingInline: '5px', paddingTop: '2px', backgroundColor: '#8b499b', borderRadius: '5px 0px 0px 5px',}}/>
         <TextField id="outlined-search" label="Search" type="search" {...props} value={value} onChange={e => setValue(e.target.value)} sx={{paddingBottom: '10px'}}/>
       </Box>

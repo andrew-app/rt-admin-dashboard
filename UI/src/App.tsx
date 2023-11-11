@@ -28,8 +28,7 @@ const App = () => {
         spacing={0}
         direction="column"
         alignItems="center"
-        justifyContent="center"
-        sx={{ minHeight: '100vh' }}
+        sx={{ minHeight: '100vh'}}
       >
       <Grid item xs={3}>
         <UserTable />
