@@ -36,6 +36,6 @@ class Controller {
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(EventConsumerConfig::class.java)
+        private val logger = LoggerFactory.getLogger(Controller::class.java)
     }
 }
