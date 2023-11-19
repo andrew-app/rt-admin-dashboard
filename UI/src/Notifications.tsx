@@ -18,6 +18,7 @@ const Notifications = () => {
     const menuOpen = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
+        setCount(0);
     };
     const handleClose = () => {
         setAnchorEl(null);
@@ -38,6 +39,7 @@ const Notifications = () => {
 
     if (userData?.data?.length === 0) {
         setCount(0);
+        sessionStorage.removeItem('notifications');
     }
 
     return (
@@ -53,6 +55,7 @@ const Notifications = () => {
                 <NotificationsIcon fontSize='large' />
             </Badge>
         </IconButton>
+        {notificationStore.length > 0 &&
         <Menu
         id="basic-menu"
         anchorEl={anchorEl}
@@ -67,6 +70,7 @@ const Notifications = () => {
                 notificationStore.map((notification, index) => <MenuItem key={index} sx={{backgroundColor: '#8b499b'}} onClick={handleClose}>{notification}</MenuItem>)
             }
         </Menu>
+        }
         </>
     );
 };
