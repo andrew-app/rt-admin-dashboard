@@ -63,12 +63,12 @@ services:
      - 8082:8082
     environment:
       KAFKA_URL: host.docker.internal:9092
-  # user-ui:
-  #   build:
-  #     context: UI
-  #     dockerfile: Dockerfile
-  #   hostname: user-ui
-  #   container_name: user-ui
-  #   ports:
-  #     - 3000:3000
+  user-ui:
+    build:
+      context: UI
+      dockerfile: Dockerfile
+    hostname: user-ui
+    container_name: user-ui
+    ports:
+      - 3000:3000
     
