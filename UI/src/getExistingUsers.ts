@@ -10,4 +10,4 @@ const fetchUsers: () => Promise<UserDetails[]> = async () => {
     return response.data.users;
 }
 
-export const getExistingUsers = () => useQuery(['existingUsers'], fetchUsers, { staleTime: 1000 * 20 });
+export const GetExistingUsers = () => useQuery(['existingUsers'], fetchUsers, { staleTime: Infinity });

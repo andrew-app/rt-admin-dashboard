@@ -9,7 +9,7 @@ import { Search } from './Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { StatusTag, StatusTypes } from './StatusTag';
 import Notifications from './Notifications';
-import { getExistingUsers } from './getExistingUsers';
+import { GetExistingUsers } from './GetExistingUsers';
 import { UserDetails } from './UserTypes';
 
 const UserCard = styled(Paper)(({ theme }) => ({
@@ -20,7 +20,7 @@ const UserCard = styled(Paper)(({ theme }) => ({
 }));
 
 const UserTable = () => {
-    const { status, data, error } = getExistingUsers();
+    const { status, data, error } = GetExistingUsers();
 
     const columnHelper = createColumnHelper<UserDetails>();
 

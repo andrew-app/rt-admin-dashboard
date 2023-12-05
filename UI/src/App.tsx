@@ -1,12 +1,11 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
 import UserTable from "./UserTable";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Grid } from "@mui/material";
 
 const App = () => {
-  const queryClient = new QueryClient();
+  
   const theme = createTheme({
     typography: {
       fontFamily: 'Libre Franklin, Quicksand',
@@ -20,7 +19,6 @@ const App = () => {
   });
 
   return (
-    <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
       <CssBaseline />
       <Grid
@@ -35,8 +33,6 @@ const App = () => {
       </Grid>
     </Grid>
       </ThemeProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
   );
 };
 
