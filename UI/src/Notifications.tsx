@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 const Notifications = () => {
-    const API_BASE_URL = import.meta.env.VITE_API_USER_STREAM || '';
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:443';
     const { data } = useEventSourceQuery(['notifications'], `${API_BASE_URL}/userstatus`);
     const [open, setOpen] = useState(false);
     const queryClient = useQueryClient();
-    const refetchUsers = () => queryClient.refetchQueries(['existingUsers']);
+    const invalidateUsers = () => queryClient.invalidateQueries(['existingUsers']);
     const [count, setCount] = useState(0);
     let notificationStore: string[] = JSON.parse(sessionStorage.getItem('notifications') || '[]');
 
@@ -25,16 +25,13 @@ const Notifications = () => {
     useEffect(() => {
         if (data) {
             setOpen(true);
-            refetchUsers();
+            invalidateUsers();
             setCount((prev) => prev + 1);
             notificationStore.push(data)
             sessionStorage.setItem('notifications', JSON.stringify(notificationStore));
         }
     }, [data]);
 
-    useEffect(() => {
-        sessionStorage.removeItem('notifications');
-    }, []);
 
     return (
         <>
@@ -45,7 +42,7 @@ const Notifications = () => {
             </Alert>
         </Snackbar>
         <IconButton color='secondary' aria-label='show notifications' size='small' onClick={handleClick}>
-            <Badge color='error' badgeContent={count} anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}>
+            <Badge color='error' badgeContent={count >=10 ? +9 : count} anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}>
                 <NotificationsIcon fontSize='large' />
             </Badge>
         </IconButton>

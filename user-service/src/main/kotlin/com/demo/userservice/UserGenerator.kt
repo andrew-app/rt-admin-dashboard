@@ -16,7 +16,7 @@ class UserGenerator(
     fun addUser() {
         val firstName = mockUserGenerator.name().firstName()
         val lastName = mockUserGenerator.name().lastName()
-        if (usersRepository.userSize() >= 40 ) {
+        if (usersRepository.userSize() >= 1000 ) {
             usersRepository.deleteAllUsers()
         }
         usersRepository.saveUser(

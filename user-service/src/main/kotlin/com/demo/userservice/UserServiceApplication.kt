@@ -18,12 +18,3 @@ fun main(args: Array<String>) {
 
 val objectMapper = com.fasterxml.jackson.module.kotlin.jacksonObjectMapper()
     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)!!
-
-
-@Configuration
-@EnableWebMvc
-class WebConfig : WebMvcConfigurer {
-    override fun addCorsMappings(registry: CorsRegistry) {
-        registry.addMapping("/**")
-    }
-}

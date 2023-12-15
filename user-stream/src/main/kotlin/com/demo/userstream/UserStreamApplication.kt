@@ -13,11 +13,3 @@ class UserStreamApplication
 fun main(args: Array<String>) {
 	runApplication<UserStreamApplication>(*args)
 }
-
-@Configuration
-@EnableWebFlux
-class WebfluxConfig : WebFluxConfigurer {
-	override fun addCorsMappings(registry: CorsRegistry) {
-		registry.addMapping("/**")
-	}
-}

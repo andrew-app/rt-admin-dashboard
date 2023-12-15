@@ -59,10 +59,22 @@ services:
       context: user-stream
       dockerfile: Dockerfile
     container_name: user-stream
+    depends_on:
+      - user-service
     ports:
      - 8082:8082
     environment:
       KAFKA_URL: host.docker.internal:9092
+  nginx:
+    image: nginx:stable-alpine3.17-slim
+    container_name: nginx
+    ports:
+      - 443:443
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - user-service
+      - user-stream
   user-ui:
     build:
       context: UI
