@@ -9,7 +9,7 @@ import { Search } from './Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { StatusTag, StatusTypes } from './StatusTag';
 import Notifications from './Notifications';
-import { GetExistingUsers } from './GetExistingUsers';
+import { GetExistingUsers } from './getExistingUsers';
 import { UserDetails } from './UserTypes';
 
 const UserCard = styled(Paper)(({ theme }) => ({
