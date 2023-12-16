@@ -66,12 +66,12 @@ services:
     environment:
       KAFKA_URL: host.docker.internal:9092
   nginx:
-    image: nginx:stable-alpine3.17-slim
+    build:
+      context: nginx
+      dockerfile: Dockerfile
     container_name: nginx
     ports:
       - 443:443
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - user-service
       - user-stream
@@ -83,4 +83,6 @@ services:
     container_name: user-ui
     ports:
       - 3000:3000
+    depends_on:
+      - nginx
     
