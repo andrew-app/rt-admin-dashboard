@@ -5,5 +5,4 @@ node_modules
 *.p12
 *.lockb
 .env.*
-.env
 !.env.local
